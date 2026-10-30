@@ -1,7 +1,7 @@
 {
   // Cloudflare Workers Static Assets — deploy with: npm run deploy:web
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "hayat",
+  "name": "lifedex",
   "compatibility_date": "2026-10-01",
   "assets": {
     "directory": "./dist",
