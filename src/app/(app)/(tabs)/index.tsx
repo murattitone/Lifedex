@@ -1,5 +1,4 @@
 import { router } from 'expo-router';
-import * as WebBrowser from 'expo-web-browser';
 import { ArrowRight, ArrowUpRight, Plus } from 'lucide-react-native';
 import { Fragment } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -273,7 +272,7 @@ function NewsRow({ item }: { item: Upcoming }) {
   const host = item.url ? item.url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0] : '';
   return (
     <Pressable
-      onPress={() => item.url && WebBrowser.openBrowserAsync(item.url)}
+      onPress={() => router.push(`/news/${item.key}`)}
       style={({ pressed }) => [{ paddingVertical: 12, gap: 4 }, pressed && { opacity: 0.55 }]}>
       <Text variant="bodyMedium">{item.title}</Text>
       {item.body ? (

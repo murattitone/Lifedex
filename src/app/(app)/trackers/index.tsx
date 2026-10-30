@@ -1,4 +1,3 @@
-import { router } from 'expo-router';
 import { Plus, Settings2, Undo2 } from 'lucide-react-native';
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -11,13 +10,14 @@ import { ChipSelect, Ring } from '@/components/ui/misc';
 import { Screen } from '@/components/ui/screen';
 import { Sheet } from '@/components/ui/sheet';
 import { Text } from '@/components/ui/text';
-import { useAddLog, useDeleteLog, useItems, useLogs, useSaveItem } from '@/lib/data';
+import { useAddLog, useDeleteLog, useItems, useLogs, useSaveItem, useSettings, useUpdateProfile } from '@/lib/data';
 import { addDays, dayKey, fmt } from '@/lib/date';
 import { font, radius, useTheme } from '@/lib/theme';
 import { formatAmount, useTrackerTotals, type TrackerDef } from '@/lib/trackers';
 
 export default function Trackers() {
   const totals = useTrackerTotals(7);
+  const [editGoals, setEditGoals] = useState(false);
   return (
     <Screen
       title="Günlük takip"
@@ -25,11 +25,31 @@ export default function Trackers() {
       back
       refreshing={totals.isRefetching}
       onRefresh={totals.refetch}
-      right={<IconButton icon={Settings2} onPress={() => router.push('/me')} accessibilityLabel="Hedefleri düzenle" />}>
+      right={<IconButton icon={Settings2} onPress={() => setEditGoals(true)} accessibilityLabel="Hedefleri düzenle" />}>
       {totals.summary.map((t) => (
         <TrackerCard key={t.kind} t={t} value={t.value} goal={t.goal} week={totals.totals[t.kind] ?? {}} />
       ))}
+      {editGoals && <GoalsSheet onClose={() => setEditGoals(false)} />}
     </Screen>
+  );
+}
+
+function GoalsSheet({ onClose }: { onClose: () => void }) {
+  const settings = useSettings();
+  const update = useUpdateProfile();
+  const [v, setV] = useState({ water: String(settings.water_goal), protein: String(settings.protein_goal), pages: String(settings.pages_goal) });
+  const save = () =>
+    update.mutate(
+      { settings: { water_goal: Number(v.water) || 2500, protein_goal: Number(v.protein) || 120, pages_goal: Number(v.pages) || 20 } },
+      { onSuccess: onClose },
+    );
+  return (
+    <Sheet visible onClose={onClose} title="Günlük hedefler">
+      <Input label="Su (ml)" keyboardType="number-pad" value={v.water} onChangeText={(t) => setV({ ...v, water: t })} />
+      <Input label="Protein (g)" keyboardType="number-pad" value={v.protein} onChangeText={(t) => setV({ ...v, protein: t })} />
+      <Input label="Okuma (sayfa)" keyboardType="number-pad" value={v.pages} onChangeText={(t) => setV({ ...v, pages: t })} />
+      <Button title="Hedefleri kaydet" onPress={save} loading={update.isPending} />
+    </Sheet>
   );
 }
 

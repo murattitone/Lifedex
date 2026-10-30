@@ -9,6 +9,7 @@ import { Card } from '@/components/ui/card';
 import { Badge, ChipSelect, Divider, EmptyState, SectionHeader } from '@/components/ui/misc';
 import { Screen } from '@/components/ui/screen';
 import { Text } from '@/components/ui/text';
+import { useSaveItem } from '@/lib/data';
 import { dayKey, fmt, parseDay } from '@/lib/date';
 import { fmtKg, programData, suggestNext, useActiveProgram, useExerciseHistory, type Session, type WorkoutDay } from '@/lib/fitness';
 import { font, radius, useTheme } from '@/lib/theme';
@@ -20,7 +21,9 @@ export default function Fitness() {
   const program = programs.find((p) => p.id === selectedId) ?? active;
   const pd = programData(program);
   const { history } = useExerciseHistory(program?.id);
+  const save = useSaveItem();
   const blue = accent('blue');
+  const [viewDay, setViewDay] = useState<number | null>(null);
 
   if (!isLoading && !program) {
     return (
@@ -35,9 +38,14 @@ export default function Fitness() {
     );
   }
 
-  const today = pd.days[pd.current_day];
-  const nextIndex = pd.days.length ? (pd.current_day + 1) % pd.days.length : 0;
+  const shown = viewDay !== null && viewDay < pd.days.length ? viewDay : pd.current_day;
+  const today = pd.days[shown];
+  const isQueued = shown === pd.current_day;
+  const nextIndex = pd.days.length ? (shown + 1) % pd.days.length : 0;
   const next = pd.days[nextIndex];
+
+  const makeCurrent = (i: number) =>
+    program && save.mutate({ id: program.id, module: 'fitness', kind: 'workout_program', data: { ...program.data, current_day: i } });
 
   return (
     <Screen
@@ -48,23 +56,34 @@ export default function Fitness() {
         <IconButton icon={Pencil} onPress={() => program && router.push(`/fitness/program/${program.id}`)} accessibilityLabel="Programı düzenle" />
       }>
       {programs.length > 1 && (
-        <ChipSelect value={program?.id} onChange={setSelectedId} options={programs.map((p) => ({ value: p.id, label: p.title }))} />
+        <ChipSelect
+          value={program?.id}
+          onChange={(id) => {
+            setSelectedId(id);
+            setViewDay(null);
+          }}
+          options={programs.map((p) => ({ value: p.id, label: p.title }))}
+        />
       )}
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
         {pd.days.map((d, i) => {
-          const isCurrent = i === pd.current_day;
+          const isShown = i === shown;
           return (
-            <View
+            <Pressable
               key={d.id}
-              style={[styles.dayPill, { backgroundColor: isCurrent ? blue.strong : c.surface, borderColor: isCurrent ? blue.strong : c.border }]}>
-              <Text variant="caption" color={isCurrent ? c.primaryText : c.textSubtle} style={isCurrent ? { opacity: 0.7 } : undefined}>
+              accessibilityRole="tab"
+              accessibilityState={{ selected: isShown }}
+              onPress={() => setViewDay(i)}
+              style={[styles.dayPill, { backgroundColor: isShown ? blue.strong : c.surface, borderColor: isShown ? blue.strong : c.border }]}>
+              <Text variant="caption" color={isShown ? c.primaryText : c.textSubtle} style={isShown ? { opacity: 0.7 } : undefined}>
                 Gün {i + 1}
+                {i === pd.current_day ? ' · sıradaki' : ''}
               </Text>
-              <Text variant="label" style={{ fontFamily: font.semibold }} color={isCurrent ? c.primaryText : c.text} numberOfLines={1}>
+              <Text variant="label" style={{ fontFamily: font.semibold }} color={isShown ? c.primaryText : c.text} numberOfLines={1}>
                 {d.name}
               </Text>
-            </View>
+            </Pressable>
           );
         })}
       </ScrollView>
@@ -74,20 +93,36 @@ export default function Fitness() {
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View style={{ flex: 1 }}>
               <Text variant="caption" tone="muted">
-                Bugün · Gün {pd.current_day + 1}
+                {isQueued ? `Sıradaki · Gün ${shown + 1}` : `Gün ${shown + 1} · sıradaki gün ${pd.current_day + 1}`}
               </Text>
               <Text variant="title">{today.name}</Text>
             </View>
             {pd.last_done === dayKey() && <Badge label="Bugün yapıldı" bg={c.successSoft} color={c.success} />}
           </View>
           <DayPlan day={today} history={history} />
-          <Button title="Antrenmanı başlat" icon={Play} variant="dark" onPress={() => router.push(`/fitness/workout?program=${program!.id}`)} />
+          <Button
+            title="Antrenmanı başlat"
+            icon={Play}
+            variant="dark"
+            onPress={() => router.push(`/fitness/workout?program=${program!.id}&day=${shown}`)}
+          />
+          {!isQueued && (
+            <Button
+              title={`Sıradaki gün olarak ayarla`}
+              variant="outline"
+              loading={save.isPending}
+              onPress={() => {
+                makeCurrent(shown);
+                setViewDay(null);
+              }}
+            />
+          )}
         </Card>
       )}
 
       {next && pd.days.length > 1 && (
         <>
-          <SectionHeader title={`Sonraki gün · ${next.name}`} />
+          <SectionHeader title={`Ardından · Gün ${nextIndex + 1} ${next.name}`} />
           <Card>
             <DayPlan day={next} history={history} showSuggestion />
           </Card>

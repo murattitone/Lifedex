@@ -15,12 +15,12 @@ import { fmtKg, programData, repsTarget, suggestNext, useActiveProgram, useExerc
 import { font, radius, useTheme } from '@/lib/theme';
 
 export default function Workout() {
-  const params = useLocalSearchParams<{ program?: string }>();
+  const params = useLocalSearchParams<{ program?: string; day?: string }>();
   const { programs, program: active } = useActiveProgram();
   const program = programs.find((p) => p.id === params.program) ?? active;
   const pd = programData(program);
-  const [dayIndex, setDayIndex] = useState<number | null>(null);
-  const di = dayIndex ?? pd.current_day;
+  const [dayIndex, setDayIndex] = useState<number | null>(params.day !== undefined && !Number.isNaN(Number(params.day)) ? Number(params.day) : null);
+  const di = dayIndex !== null && dayIndex < pd.days.length ? dayIndex : pd.current_day;
   const day = pd.days[di];
   const today = dayKey();
   const { logs, history } = useExerciseHistory(program?.id);

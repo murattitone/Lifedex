@@ -92,7 +92,13 @@ function AlertCard({ a }: { a: Upcoming }) {
   const k = ALERT_KINDS[a.kind];
   const ac = accent(k.accent);
   const left = daysBetween(new Date(), a.date);
-  const onPress = a.itemId ? () => router.push(`/item/${a.itemId}`) : a.url ? () => WebBrowser.openBrowserAsync(a.url!) : undefined;
+  const onPress = a.itemId
+    ? () => router.push(`/item/${a.itemId}`)
+    : a.kind === 'news'
+      ? () => router.push(`/news/${a.key}`)
+      : a.url
+        ? () => WebBrowser.openBrowserAsync(a.url!)
+        : undefined;
   return (
     <Card onPress={onPress} style={{ flexDirection: 'row', gap: 12 }}>
       <IconTile icon={k.icon} color={ac.strong} bg={ac.soft} size={42} />
@@ -110,7 +116,7 @@ function AlertCard({ a }: { a: Upcoming }) {
           {a.importance >= 3 && <Badge label="Önemli" bg={c.dangerSoft} color={c.danger} />}
         </View>
       </View>
-      {a.url && <ExternalLink size={16} color={c.textSubtle} />}
+      {a.url && a.kind !== 'news' && <ExternalLink size={16} color={c.textSubtle} />}
     </Card>
   );
 }

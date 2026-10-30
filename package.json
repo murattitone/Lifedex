@@ -62,7 +62,8 @@
     "deploy:web": "npm run build:web && npx wrangler deploy",
     "build:apk": "eas build -p android --profile preview",
     "lint": "expo lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "npm run build:web && node tests/e2e.cjs"
   },
   "private": true
 }
