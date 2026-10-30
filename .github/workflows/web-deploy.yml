@@ -41,14 +41,22 @@ jobs:
       - name: Resolve Cloudflare account
         if: steps.cf.outputs.skip != 'true'
         run: |
+          # Clean up common paste mistakes: whitespace/newlines, quotes, "Bearer " prefix, "token" words
+          raw="$CLOUDFLARE_API_TOKEN"
+          clean=$(printf '%s' "$raw" | sed -E 's/^[[:space:]]*(Bearer[[:space:]]+)?//I' | grep -oE '[A-Za-z0-9_-]{30,}' | head -1)
+          echo "::add-mask::$clean"
+          echo "::notice::token shape: raw_len=${#raw} clean_len=${#clean} prefix=${clean:0:5} whitespace_removed=$([ "$raw" != "$clean" ] && echo yes || echo no)"
+          echo "CLOUDFLARE_API_TOKEN=$clean" >> "$GITHUB_ENV"
+          CLOUDFLARE_API_TOKEN="$clean"
           verify=$(curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" https://api.cloudflare.com/client/v4/user/tokens/verify | jq -c '{success, status: .result.status, errors: [.errors[]?.message]}')
           echo "::notice::token verify: $verify"
           if [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
             accounts=$(curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" "https://api.cloudflare.com/client/v4/accounts?per_page=50")
             echo "::notice::accounts: $(echo "$accounts" | jq -c '{success, count: (.result | length), errors: [.errors[]?.message]}')"
             id=$(echo "$accounts" | jq -r '.result[0].id // empty')
-            [ -n "$id" ] && echo "CLOUDFLARE_ACCOUNT_ID=$id" >> "$GITHUB_ENV"
+            if [ -n "$id" ]; then echo "CLOUDFLARE_ACCOUNT_ID=$id" >> "$GITHUB_ENV"; fi
           fi
+          exit 0
       - name: Deploy with Wrangler
         if: steps.cf.outputs.skip != 'true'
         run: |
