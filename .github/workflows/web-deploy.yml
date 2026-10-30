@@ -38,5 +38,25 @@ jobs:
           cache: npm
       - if: steps.cf.outputs.skip != 'true'
         run: npm ci && npm run build:web
-      - if: steps.cf.outputs.skip != 'true'
-        run: npx wrangler@4 deploy
+      - name: Resolve Cloudflare account
+        if: steps.cf.outputs.skip != 'true'
+        run: |
+          verify=$(curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" https://api.cloudflare.com/client/v4/user/tokens/verify | jq -c '{success, status: .result.status, errors: [.errors[]?.message]}')
+          echo "::notice::token verify: $verify"
+          if [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            accounts=$(curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" "https://api.cloudflare.com/client/v4/accounts?per_page=50")
+            echo "::notice::accounts: $(echo "$accounts" | jq -c '{success, count: (.result | length), errors: [.errors[]?.message]}')"
+            id=$(echo "$accounts" | jq -r '.result[0].id // empty')
+            [ -n "$id" ] && echo "CLOUDFLARE_ACCOUNT_ID=$id" >> "$GITHUB_ENV"
+          fi
+      - name: Deploy with Wrangler
+        if: steps.cf.outputs.skip != 'true'
+        run: |
+          set +e
+          npx wrangler@4 deploy 2>&1 | tee deploy.log
+          code=${PIPESTATUS[0]}
+          if [ "$code" != 0 ]; then
+            echo "::error::$(grep -v '^\s*$' deploy.log | tail -25 | tr '\n' ' ' | cut -c1-3000)"
+            exit "$code"
+          fi
+          echo "::notice::$(grep -Eo 'https://[a-z0-9.-]+\.workers\.dev' deploy.log | head -1)"
