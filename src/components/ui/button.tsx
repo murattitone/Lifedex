@@ -5,7 +5,7 @@ import { ActivityIndicator, Platform, Pressable, StyleSheet, View, type Pressabl
 import { font, radius, useTheme } from '@/lib/theme';
 import { Text } from './text';
 
-type Variant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'dark';
+type Variant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'dark' | 'signal';
 type Size = 'sm' | 'md' | 'lg';
 
 export const haptic = (style: 'light' | 'medium' | 'success' = 'light') => {
@@ -13,6 +13,19 @@ export const haptic = (style: 'light' | 'medium' | 'success' = 'light') => {
   if (style === 'success') Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   else Haptics.impactAsync(style === 'medium' ? Haptics.ImpactFeedbackStyle.Medium : Haptics.ImpactFeedbackStyle.Light);
 };
+
+function useVariant(variant: Variant) {
+  const { c } = useTheme();
+  return {
+    primary: { bg: c.primary, fg: c.primaryText, border: c.primary },
+    dark: { bg: c.primary, fg: c.primaryText, border: c.primary },
+    signal: { bg: c.signal, fg: '#FFFFFF', border: c.signal },
+    secondary: { bg: c.surfaceMuted, fg: c.text, border: c.surfaceMuted },
+    outline: { bg: 'transparent', fg: c.text, border: c.borderStrong },
+    ghost: { bg: 'transparent', fg: c.text, border: 'transparent' },
+    destructive: { bg: 'transparent', fg: c.danger, border: c.border },
+  }[variant];
+}
 
 export function Button({
   title,
@@ -32,16 +45,8 @@ export function Button({
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
 }) {
-  const { c } = useTheme();
-  const map = {
-    primary: { bg: c.primary, fg: c.primaryText, border: c.primary },
-    secondary: { bg: c.primarySoft, fg: c.primary, border: c.primarySoft },
-    outline: { bg: c.surface, fg: c.text, border: c.border },
-    ghost: { bg: 'transparent', fg: c.text, border: 'transparent' },
-    destructive: { bg: c.dangerSoft, fg: c.danger, border: c.dangerSoft },
-    dark: { bg: c.dock, fg: '#fff', border: c.dock },
-  }[variant];
-  const h = { sm: 36, md: 46, lg: 54 }[size];
+  const map = useVariant(variant);
+  const h = { sm: 34, md: 46, lg: 52 }[size];
   return (
     <Pressable
       accessibilityRole="button"
@@ -53,8 +58,8 @@ export function Button({
       style={({ pressed }) => [
         styles.base,
         { height: h, paddingHorizontal: size === 'sm' ? 12 : 18, backgroundColor: map.bg, borderColor: map.border },
-        (disabled || loading) && { opacity: 0.5 },
-        pressed && { opacity: 0.85, transform: [{ scale: 0.985 }] },
+        (disabled || loading) && { opacity: 0.45 },
+        pressed && { opacity: 0.8 },
         style,
       ]}
       {...props}>
@@ -62,9 +67,9 @@ export function Button({
         <ActivityIndicator color={map.fg} />
       ) : (
         <>
-          {Icon && <Icon size={size === 'sm' ? 16 : 18} color={map.fg} strokeWidth={2.2} />}
+          {Icon && <Icon size={size === 'sm' ? 15 : 17} color={map.fg} strokeWidth={1.8} />}
           {title && (
-            <Text variant="label" style={{ fontFamily: font.semibold, fontSize: size === 'sm' ? 13 : 15 }} color={map.fg}>
+            <Text variant="label" style={{ fontFamily: font.semibold, fontSize: size === 'sm' ? 13 : 15, letterSpacing: -0.1 }} color={map.fg}>
               {title}
             </Text>
           )}
@@ -91,11 +96,7 @@ export function IconButton({
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
 }) {
-  const { c } = useTheme();
-  const bg = { primary: c.primary, secondary: c.primarySoft, outline: c.surface, ghost: 'transparent', destructive: c.dangerSoft, dark: c.dock }[
-    variant
-  ];
-  const fg = color ?? { primary: '#fff', secondary: c.primary, outline: c.text, ghost: c.text, destructive: c.danger, dark: '#fff' }[variant];
+  const map = useVariant(variant);
   return (
     <Pressable
       accessibilityRole="button"
@@ -106,13 +107,13 @@ export function IconButton({
       }}
       hitSlop={6}
       style={({ pressed }) => [
-        { width: size, height: size, borderRadius: size / 2, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' },
-        variant === 'outline' && { borderWidth: StyleSheet.hairlineWidth * 2, borderColor: c.border },
-        pressed && { opacity: 0.7 },
+        { width: size, height: size, borderRadius: radius.md, backgroundColor: map.bg, alignItems: 'center', justifyContent: 'center' },
+        map.border !== 'transparent' && { borderWidth: 1, borderColor: map.border },
+        pressed && { opacity: 0.65 },
         style,
       ]}>
       <View>
-        <Icon size={Math.round(size * 0.45)} color={fg} strokeWidth={2} />
+        <Icon size={Math.round(size * 0.44)} color={color ?? map.fg} strokeWidth={1.8} />
       </View>
     </Pressable>
   );

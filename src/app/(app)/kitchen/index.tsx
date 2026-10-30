@@ -7,7 +7,7 @@ import { ImageStrip } from '@/components/images';
 import { Button, IconButton } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Badge, Checkbox, ChipSelect, EmptyState, IconTile, Segmented } from '@/components/ui/misc';
+import { Badge, Checkbox, ChipSelect, EmptyState, IconTile, Segmented, RuledList } from '@/components/ui/misc';
 import { Screen } from '@/components/ui/screen';
 import { Text } from '@/components/ui/text';
 import { confirm, notify } from '@/lib/confirm';
@@ -85,11 +85,11 @@ function Shopping() {
           <Text variant="label" tone="muted">
             {label}
           </Text>
-          <Card padded={false} style={{ paddingHorizontal: 14 }}>
+          <RuledList>
             {list.map((i) => (
               <ShoppingRow key={i.id} item={i} onToggle={() => toggle(i)} />
             ))}
-          </Card>
+          </RuledList>
         </View>
       ))}
       {done.length > 0 && (
@@ -104,11 +104,11 @@ function Shopping() {
               </Text>
             </Pressable>
           </View>
-          <Card padded={false} style={{ paddingHorizontal: 14, opacity: 0.7 }}>
+          <RuledList style={{ opacity: 0.6 }}>
             {done.map((i) => (
               <ShoppingRow key={i.id} item={i} onToggle={() => toggle(i)} />
             ))}
-          </Card>
+          </RuledList>
         </View>
       )}
       <Text variant="caption" tone="subtle" style={{ color: c.textSubtle }}>

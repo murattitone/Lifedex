@@ -50,8 +50,12 @@ export function goalStats(goal: Item, logs: Log[]) {
   };
 }
 
-export const money = (n: number | null | undefined, cur = '₺') =>
-  n === null || n === undefined ? '—' : `${cur}${Math.round(n).toLocaleString('tr-TR')}`;
+/** Lira is written as a "TL" suffix: the UI font's ₺ glyph is easily misread as £. */
+export const money = (n: number | null | undefined, cur = 'TL') => {
+  if (n === null || n === undefined) return '—';
+  const v = Math.round(n).toLocaleString('tr-TR');
+  return cur === '₺' || cur === 'TL' ? `${v} TL` : `${cur}${v}`;
+};
 
 export function useGoalStats(goals: Item[], logs: Log[] | undefined) {
   return useMemo(() => Object.fromEntries(goals.map((g) => [g.id, goalStats(g, logs ?? [])])), [goals, logs]);

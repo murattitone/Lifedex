@@ -1,8 +1,12 @@
 import { Pressable, StyleSheet, View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native';
 
-import { radius, shadow, useTheme } from '@/lib/theme';
+import { radius, useTheme } from '@/lib/theme';
 import { haptic } from './button';
 
+/**
+ * Plain card = an editorial ruled block (top hairline, vertical rhythm, no box).
+ * Tinted card = the only boxed surface, reserved for content that should stand apart.
+ */
 export function Card({
   children,
   style,
@@ -10,7 +14,6 @@ export function Card({
   onPress,
   onLongPress,
   padded = true,
-  flat,
   ...props
 }: ViewProps & {
   tint?: string;
@@ -20,12 +23,11 @@ export function Card({
   flat?: boolean;
   style?: StyleProp<ViewStyle>;
 }) {
-  const { c, isDark } = useTheme();
+  const { c } = useTheme();
   const base: StyleProp<ViewStyle> = [
-    styles.card,
-    { backgroundColor: tint ?? c.surface, borderColor: tint ? 'transparent' : c.border },
-    padded && { padding: 16 },
-    !flat && !isDark && shadow,
+    tint
+      ? [styles.box, { backgroundColor: tint }, padded && { padding: 16 }]
+      : [styles.ruled, { borderTopColor: c.border }, padded && { paddingVertical: 14 }],
     style,
   ];
   if (!onPress && !onLongPress) {
@@ -42,7 +44,7 @@ export function Card({
         onPress?.();
       }}
       onLongPress={onLongPress}
-      style={({ pressed }) => [base, pressed && { opacity: 0.92, transform: [{ scale: 0.99 }] }]}
+      style={({ pressed }) => [base, pressed && { opacity: 0.75 }]}
       {...props}>
       {children}
     </Pressable>
@@ -50,5 +52,6 @@ export function Card({
 }
 
 const styles = StyleSheet.create({
-  card: { borderRadius: radius.lg, borderWidth: 1 },
+  box: { borderRadius: radius.lg },
+  ruled: { borderTopWidth: 1 },
 });

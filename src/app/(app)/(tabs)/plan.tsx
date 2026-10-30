@@ -8,7 +8,7 @@ import { Button, IconButton } from '@/components/ui/button';
 import { MonthCalendar } from '@/components/ui/calendar';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { EmptyState, ListRow, Segmented } from '@/components/ui/misc';
+import { EmptyState, ListRow, Segmented, RuledList } from '@/components/ui/misc';
 import { Screen } from '@/components/ui/screen';
 import { Text } from '@/components/ui/text';
 import { ALERT_KINDS, useUpcoming } from '@/lib/alerts';
@@ -95,11 +95,11 @@ function Tasks() {
             <Text variant="label" tone="muted">
               {title} · {list.length}
             </Text>
-            <Card padded={false} style={{ paddingHorizontal: 16, paddingVertical: 2 }}>
+            <RuledList>
               {list.map((t) => (
                 <TaskRow key={t.id} item={t} />
               ))}
-            </Card>
+            </RuledList>
           </View>
         ))}
     </>
@@ -168,7 +168,7 @@ function CalendarView() {
           onPress={() => router.push(`/item/new?kind=task&due=${encodeURIComponent(at9)}`)}
         />
       </View>
-      <Card padded={false} style={{ paddingHorizontal: 14, paddingVertical: 4 }}>
+      <RuledList>
         {list.length === 0 ? (
           <Text tone="muted" style={{ paddingVertical: 14 }}>
             Bu gün için kayıt yok.
@@ -187,14 +187,13 @@ function CalendarView() {
             />
           ))
         )}
-      </Card>
+      </RuledList>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
         {[
-          ['Görev', accent('rose').strong],
-          ['Yemek', accent('orange').strong],
-          ['Tatil', accent('blue').strong],
-          ['Dini gün', accent('teal').strong],
-          ['Hedef', accent('green').strong],
+          ['Görev / plan', c.text],
+          ['Tatil · özel gün', c.signal],
+          ['Dini gün · hedef', c.success],
+          ['İndirim', c.warning],
         ].map(([l, col]) => (
           <View key={l} style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
             <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: col }} />

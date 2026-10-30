@@ -83,7 +83,7 @@ export const KINDS: KindDef[] = [
     module: 'planner',
     label: 'Görev',
     icon: ListTodo,
-    accent: 'rose',
+    accent: 'slate',
     defaults: { status: 'todo', data: { remind_offset: '0', priority: 'normal' } },
     fields: [
       { key: 'title', type: 'text', label: 'Başlık', placeholder: 'Ne yapılacak?', required: true },
@@ -133,7 +133,7 @@ export const KINDS: KindDef[] = [
     module: 'kitchen',
     label: 'Alışveriş',
     icon: ShoppingBasket,
-    accent: 'orange',
+    accent: 'slate',
     defaults: { status: 'todo', data: { category: 'diger' } },
     fields: [
       { key: 'title', type: 'text', label: 'Ürün', placeholder: 'ör. Domates', required: true },
@@ -147,7 +147,7 @@ export const KINDS: KindDef[] = [
     module: 'kitchen',
     label: 'Tarif',
     icon: ChefHat,
-    accent: 'orange',
+    accent: 'slate',
     favorite: true,
     fields: [
       { key: 'title', type: 'text', label: 'Tarif adı', required: true },
@@ -165,7 +165,7 @@ export const KINDS: KindDef[] = [
     module: 'kitchen',
     label: 'Yemek planı',
     icon: CookingPot,
-    accent: 'orange',
+    accent: 'slate',
     defaults: { data: { remind_offset: '0', alarm: true } },
     fields: [
       { key: 'title', type: 'text', label: 'Ne pişecek?', required: true },
@@ -180,7 +180,7 @@ export const KINDS: KindDef[] = [
     module: 'faith',
     label: 'Ayet',
     icon: Sparkles,
-    accent: 'teal',
+    accent: 'green',
     favorite: true,
     fields: [
       { key: 'title', type: 'text', label: 'Sure / ayet', placeholder: 'ör. Bakara 286', required: true },
@@ -196,7 +196,7 @@ export const KINDS: KindDef[] = [
     module: 'growth',
     label: 'Kitap',
     icon: BookMarked,
-    accent: 'violet',
+    accent: 'slate',
     defaults: { status: 'wishlist' },
     favorite: true,
     fields: [
@@ -215,7 +215,7 @@ export const KINDS: KindDef[] = [
     module: 'growth',
     label: 'Film',
     icon: Clapperboard,
-    accent: 'violet',
+    accent: 'slate',
     defaults: { status: 'wishlist' },
     favorite: true,
     fields: [
@@ -233,7 +233,7 @@ export const KINDS: KindDef[] = [
     module: 'growth',
     label: 'Dizi',
     icon: Tv,
-    accent: 'violet',
+    accent: 'slate',
     defaults: { status: 'wishlist' },
     favorite: true,
     fields: [
@@ -250,7 +250,7 @@ export const KINDS: KindDef[] = [
     module: 'ideas',
     label: 'Fikir',
     icon: Lightbulb,
-    accent: 'amber',
+    accent: 'slate',
     defaults: { status: 'new', data: { potential: 3, effort: 3, excitement: 3 } },
     favorite: true,
     fields: [

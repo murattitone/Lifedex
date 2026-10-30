@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Hayat",
+    "name": "Lifedex",
     "slug": "hayat",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,7 +18,7 @@
       "package": "app.hayat.personal",
       "allowBackup": false,
       "adaptiveIcon": {
-        "backgroundColor": "#3D6BF5",
+        "backgroundColor": "#F2F0EB",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -38,10 +38,10 @@
     "web": {
       "output": "single",
       "bundler": "metro",
-      "name": "Hayat",
-      "shortName": "Hayat",
-      "themeColor": "#3D6BF5",
-      "backgroundColor": "#F3F5F9",
+      "name": "Lifedex",
+      "shortName": "Lifedex",
+      "themeColor": "#F2F0EB",
+      "backgroundColor": "#F2F0EB",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
@@ -51,16 +51,18 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#F3F5F9",
+          "backgroundColor": "#F2F0EB",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 120,
-          "dark": { "backgroundColor": "#0B0C10" }
+          "dark": {
+            "backgroundColor": "#141412"
+          }
         }
       ],
       [
         "expo-notifications",
         {
-          "color": "#3D6BF5"
+          "color": "#D2322B"
         }
       ],
       [

@@ -9,10 +9,10 @@ export type UpcomingKind = 'holiday' | 'religious' | 'shopping' | 'special' | 'n
 
 export const ALERT_KINDS: Record<UpcomingKind, { label: string; icon: LucideIcon; accent: Accent }> = {
   personal: { label: 'Benim günlerim', icon: CalendarHeart, accent: 'rose' },
-  holiday: { label: 'Resmi tatil', icon: Flag, accent: 'blue' },
-  religious: { label: 'Dini gün', icon: MoonStar, accent: 'teal' },
+  holiday: { label: 'Resmi tatil', icon: Flag, accent: 'rose' },
+  religious: { label: 'Dini gün', icon: MoonStar, accent: 'green' },
   shopping: { label: 'İndirim', icon: BadgePercent, accent: 'orange' },
-  special: { label: 'Özel gün', icon: PartyPopper, accent: 'violet' },
+  special: { label: 'Özel gün', icon: PartyPopper, accent: 'slate' },
   news: { label: 'Gündem', icon: Newspaper, accent: 'slate' },
 };
 

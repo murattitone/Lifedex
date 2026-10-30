@@ -18,7 +18,7 @@ export default function Goals() {
   const savings = useSavings();
   const stats = useGoalStats(goals.data ?? [], savings.data);
   const green = accent('green');
-  const cur = settings.currency ?? '₺';
+  const cur = settings.currency ?? 'TL';
   const totalSaved = Object.values(stats).reduce((t, s) => t + s.saved, 0);
   const totalTarget = Object.values(stats).reduce((t, s) => t + s.target, 0);
 
@@ -36,7 +36,7 @@ export default function Goals() {
           <Text variant="display" color={green.strong}>
             {money(totalSaved, cur)}
           </Text>
-          <Progress value={totalTarget ? totalSaved / totalTarget : 0} color={green.strong} track="rgba(255,255,255,0.6)" />
+          <Progress value={totalTarget ? totalSaved / totalTarget : 0} color={green.strong} track="rgba(128,128,128,0.25)" />
           <Text variant="caption" tone="muted">
             {goals.data!.length} hedef · toplam {money(totalTarget, cur)}
           </Text>

@@ -34,7 +34,7 @@ export function MonthCalendar({ value, onChange, marks = {} }: { value: string; 
   return (
     <View style={{ gap: 10 }}>
       <View style={styles.head}>
-        <Text variant="heading" style={{ textTransform: 'capitalize' }}>
+        <Text variant="heading" style={{ textTransform: 'capitalize', fontFamily: font.bold }}>
           {fmt(cursor, 'MMMM yyyy')}
         </Text>
         <View style={{ flexDirection: 'row', gap: 8 }}>
@@ -43,9 +43,9 @@ export function MonthCalendar({ value, onChange, marks = {} }: { value: string; 
         </View>
       </View>
       <View style={styles.grid}>
-        {WEEKDAYS.map((w) => (
+        {WEEKDAYS.map((w, i) => (
           <View key={w} style={styles.cell}>
-            <Text variant="caption" tone="subtle">
+            <Text variant="overline" tone={i === 6 ? 'signal' : 'subtle'}>
               {w}
             </Text>
           </View>
@@ -56,18 +56,15 @@ export function MonthCalendar({ value, onChange, marks = {} }: { value: string; 
           const selected = key === value;
           const isToday = key === today;
           const dots = marks[key] ?? [];
+          const sunday = d.getDay() === 0;
           return (
             <Pressable key={key} style={styles.cell} onPress={() => onChange(key)}>
               <View
-                style={[
-                  styles.day,
-                  selected && { backgroundColor: c.primary },
-                  !selected && isToday && { borderWidth: 1.5, borderColor: c.primary },
-                ]}>
+                style={[styles.day, selected && { backgroundColor: c.primary }, !selected && isToday && { borderWidth: 1.5, borderColor: c.signal }]}>
                 <Text
-                  variant="label"
-                  style={{ fontFamily: selected || isToday ? font.semibold : font.medium }}
-                  color={selected ? '#fff' : inMonth ? c.text : c.textSubtle}>
+                  variant="figure"
+                  style={{ fontSize: 18, fontFamily: selected || isToday ? font.numeral : font.numeralMedium, opacity: inMonth ? 1 : 0.35 }}
+                  color={selected ? c.primaryText : sunday ? c.signal : c.text}>
                   {d.getDate()}
                 </Text>
               </View>
@@ -88,7 +85,7 @@ const styles = StyleSheet.create({
   head: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   grid: { flexDirection: 'row', flexWrap: 'wrap' },
   cell: { width: `${100 / 7}%`, alignItems: 'center', paddingVertical: 3 },
-  day: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
+  day: { width: 36, height: 36, borderRadius: 6, alignItems: 'center', justifyContent: 'center' },
   dots: { flexDirection: 'row', gap: 3, height: 6, marginTop: 2 },
-  dot: { width: 5, height: 5, borderRadius: 3 },
+  dot: { width: 4, height: 4, borderRadius: 2 },
 });

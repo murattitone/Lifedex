@@ -6,7 +6,7 @@ import { View } from 'react-native';
 import { Button, IconButton } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Divider, ListRow, Ring, SectionHeader } from '@/components/ui/misc';
+import { Divider, ListRow, Ring, SectionHeader, RuledList } from '@/components/ui/misc';
 import { Screen } from '@/components/ui/screen';
 import { Sheet } from '@/components/ui/sheet';
 import { Text } from '@/components/ui/text';
@@ -25,7 +25,8 @@ export default function GoalDetail() {
   const addLog = useAddLog();
   const delLog = useDeleteLog();
   const save = useSaveItem();
-  const cur = useSettings().currency ?? '₺';
+  const cur = useSettings().currency ?? 'TL';
+  const curLabel = cur === '₺' ? 'TL' : cur;
   const [sheet, setSheet] = useState<null | 'add' | 'withdraw' | 'cut'>(null);
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
@@ -50,7 +51,7 @@ export default function GoalDetail() {
         kind: 'saving',
         item_id: goal.id,
         amount: sheet === 'withdraw' ? -n : n,
-        unit: cur,
+        unit: curLabel,
         data: note.trim() ? { note: note.trim() } : {},
       });
     }
@@ -164,7 +165,7 @@ export default function GoalDetail() {
       </Card>
 
       <SectionHeader title="Hareketler" />
-      <Card padded={false} style={{ paddingHorizontal: 14 }}>
+      <RuledList>
         {(savings.data ?? []).length === 0 ? (
           <Text tone="muted" style={{ paddingVertical: 14 }}>
             Henüz birikim eklenmedi.
@@ -191,7 +192,7 @@ export default function GoalDetail() {
             />
           ))
         )}
-      </Card>
+      </RuledList>
 
       <Sheet
         visible={!!sheet}
@@ -199,7 +200,7 @@ export default function GoalDetail() {
         title={sheet === 'cut' ? 'Tasarruf kalemi' : sheet === 'withdraw' ? 'Para çek' : 'Birikim ekle'}>
         {sheet === 'cut' && <Input label="Kalem" value={note} onChangeText={setNote} placeholder="ör. Dışarıda kahve" />}
         <Input
-          label={sheet === 'cut' ? `Aylık tutar (${cur})` : `Tutar (${cur})`}
+          label={sheet === 'cut' ? `Aylık tutar (${curLabel})` : `Tutar (${curLabel})`}
           value={amount}
           onChangeText={setAmount}
           keyboardType="decimal-pad"

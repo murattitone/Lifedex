@@ -17,7 +17,7 @@ export type TrackerDef = {
 
 export const TRACKERS: TrackerDef[] = [
   { kind: 'water', label: 'Su', unit: 'ml', goalKey: 'water_goal', quick: [200, 250, 330, 500], icon: Droplets, accent: 'sky' },
-  { kind: 'protein', label: 'Protein', unit: 'g', goalKey: 'protein_goal', quick: [10, 20, 30, 40], icon: Drumstick, accent: 'orange' },
+  { kind: 'protein', label: 'Protein', unit: 'g', goalKey: 'protein_goal', quick: [10, 20, 30, 40], icon: Drumstick, accent: 'slate' },
   { kind: 'pages', label: 'Okuma', unit: 'sayfa', goalKey: 'pages_goal', quick: [5, 10, 20, 30], icon: BookOpenText, accent: 'violet' },
 ];
 

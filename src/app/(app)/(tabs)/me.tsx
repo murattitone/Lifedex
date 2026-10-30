@@ -43,7 +43,7 @@ export default function Me() {
       <McpSettings />
 
       <Text variant="caption" tone="subtle" style={{ textAlign: 'center' }}>
-        Hayat v{Constants.expoConfig?.version ?? '1.0.0'}
+        Lifedex v{Constants.expoConfig?.version ?? '1.0.0'}
       </Text>
     </Screen>
   );
@@ -101,7 +101,7 @@ function NotificationSettings() {
   const reading = settings.reading_reminder!;
   const enable = async (fn: () => void) => {
     if (await ensureNotificationSetup()) fn();
-    else notify('Bildirim izni gerekli', 'Ayarlar > Uygulamalar > Hayat > Bildirimler kısmından izin ver.');
+    else notify('Bildirim izni gerekli', 'Ayarlar > Uygulamalar > Lifedex > Bildirimler kısmından izin ver.');
   };
 
   return (

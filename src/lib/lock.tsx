@@ -25,7 +25,7 @@ export function AppLockProvider({ children }: { children: ReactNode }) {
   const backgroundAt = useRef<number | null>(null);
 
   const unlock = useCallback(async () => {
-    const res = await LocalAuthentication.authenticateAsync({ promptMessage: 'Hayat kilidini aç', cancelLabel: 'Vazgeç' });
+    const res = await LocalAuthentication.authenticateAsync({ promptMessage: 'Lifedex kilidini aç', cancelLabel: 'Vazgeç' });
     if (res.success) setLocked(false);
   }, []);
 
@@ -71,7 +71,7 @@ export function AppLockProvider({ children }: { children: ReactNode }) {
           <View style={[styles.icon, { backgroundColor: c.primarySoft }]}>
             <LockKeyhole size={28} color={c.primary} />
           </View>
-          <Text variant="title">Hayat kilitli</Text>
+          <Text variant="title">Lifedex kilitli</Text>
           <Text tone="muted" style={{ textAlign: 'center' }}>
             Devam etmek için kimliğini doğrula.
           </Text>

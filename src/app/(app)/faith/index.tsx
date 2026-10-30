@@ -36,7 +36,7 @@ export default function Faith() {
       back
       right={<IconButton icon={Plus} variant="primary" onPress={() => router.push('/item/new?kind=verse')} accessibilityLabel="Ayet ekle" />}>
       <Card tint={teal.soft} onPress={() => router.push('/faith/qibla')} style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
-        <IconTile icon={Compass} color="#fff" bg={teal.strong} size={48} />
+        <IconTile icon={Compass} color={teal.strong} size={48} />
         <View style={{ flex: 1 }}>
           <Text variant="heading">Kıble pusulası</Text>
           <Text variant="caption" tone="muted">

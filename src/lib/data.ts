@@ -159,7 +159,7 @@ export const DEFAULT_SETTINGS: Required<Pick<Settings, 'water_goal' | 'protein_g
   reading_reminder: { enabled: false, hour: 21, minute: 0 },
   alert_notifications: true,
   timezone: 'Europe/Istanbul',
-  currency: '₺',
+  currency: 'TL',
 };
 
 export function useProfile() {

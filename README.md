@@ -1,4 +1,4 @@
-# Hayat — kişisel asistan
+# Lifedex — kişisel dizin
 
 **Web:** https://lifedex.dev-murattemel.workers.dev · **APK:** [Actions → Android APK](https://github.com/murattitone/Lifedex/actions/workflows/android-apk.yml) → son başarılı çalıştırma → Artifacts → `hayat-apk`
 
@@ -10,7 +10,7 @@ Tek kod tabanı: **Android + iOS + Web** (Expo SDK 58 / React Native 0.88 / Expo
 | Katman | Seçim | Neden |
 | --- | --- | --- |
 | Uygulama | Expo + Expo Router (TypeScript) | Tek kod ile Android, iOS ve web |
-| Arayüz | Kendi bileşen kütüphanesi (`src/components/ui`) — shadcn/ui + Untitled UI tasarım dili, Inter font, Lucide ikonlar | Bağımlılıksız, 3 platformda birebir aynı |
+| Arayüz | Kendi tasarım sistemi (`src/components/ui`, `src/lib/theme.ts`) — "takvim yaprağı" dili | Bağımlılıksız, 3 platformda birebir aynı |
 | Veritabanı | Supabase (Postgres, ücretsiz katman) | Auth + RLS + Storage + Edge Functions tek yerde |
 | Web yayını | Cloudflare Workers Static Assets (`wrangler.jsonc`) | Ücretsiz, hızlı |
 | Bildirim | `expo-notifications` (yerel, zamanlanmış) | Sunucu gerekmez, çevrimdışı çalışır |
@@ -24,6 +24,13 @@ Tüm bölümler iki genel tabloyu kullanır, **yeni bölüm eklemek için migrat
 - `alerts` (önemli günler/haberler), `api_tokens` (MCP), `profiles` (ayarlar).
 
 **Yeni bölüm eklemek:** `src/modules/registry.ts` dosyasına modülü, `src/modules/kinds.ts` dosyasına kayıt türünü (alanlarıyla) ekle → genel düzenleyici (`/item/[id]`) otomatik çalışır. İstersen `src/app/(app)/<modül>/index.tsx` ile özel liste ekranı yaz.
+
+## Tasarım dili
+Saatli Maarif takviminin günlük yaprağından yola çıkan, modern ve sade bir editoryal dil:
+- **Kâğıt + mürekkep**, tek sinyal rengi: takvim kırmızısı (tatil, özel gün, önemli). Yeşil = dini gün / tamamlandı, hardal = indirim. Renk süs değil, anlamdır.
+- **Yazı:** Schibsted Grotesk (gazete kökenli grotesk) + rakamlar için dar Big Shoulders Display. Tutarlar "TL" son ekiyle yazılır.
+- **Kart yığını yok:** ince çizgiler, numaralı bölümler (01 Defter, 02 Antrenman…), sola hizalı büyük başlıklar, metin etiketli alt menü.
+- **Ana sayfa = bugünün yaprağı:** dev tarih, hicri tarih (Ümmü'l-Kurâ), günün notu, günlük defter (çizgi göstergeli su/protein/okuma), canlı durumlu dizin.
 
 ## Güvenlik
 - Supabase Auth (e-posta + şifre, min. 8 karakter), tüm tablolarda **Row Level Security**: her kullanıcı yalnızca kendi satırlarını görür.

@@ -58,10 +58,10 @@ export default function Fitness() {
             <View
               key={d.id}
               style={[styles.dayPill, { backgroundColor: isCurrent ? blue.strong : c.surface, borderColor: isCurrent ? blue.strong : c.border }]}>
-              <Text variant="caption" color={isCurrent ? 'rgba(255,255,255,0.8)' : c.textSubtle}>
+              <Text variant="caption" color={isCurrent ? c.primaryText : c.textSubtle} style={isCurrent ? { opacity: 0.7 } : undefined}>
                 Gün {i + 1}
               </Text>
-              <Text variant="label" style={{ fontFamily: font.semibold }} color={isCurrent ? '#fff' : c.text} numberOfLines={1}>
+              <Text variant="label" style={{ fontFamily: font.semibold }} color={isCurrent ? c.primaryText : c.text} numberOfLines={1}>
                 {d.name}
               </Text>
             </View>

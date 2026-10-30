@@ -1,4 +1,12 @@
-import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, useFonts } from '@expo-google-fonts/inter';
+import { BigShouldersDisplay_600SemiBold, BigShouldersDisplay_800ExtraBold } from '@expo-google-fonts/big-shoulders-display';
+import {
+  SchibstedGrotesk_400Regular,
+  SchibstedGrotesk_500Medium,
+  SchibstedGrotesk_600SemiBold,
+  SchibstedGrotesk_700Bold,
+  SchibstedGrotesk_800ExtraBold,
+  useFonts,
+} from '@expo-google-fonts/schibsted-grotesk';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { DarkTheme, DefaultTheme, Slot, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -20,7 +28,15 @@ const queryClient = new QueryClient({
 function Root() {
   const { c, isDark } = useTheme();
   const { loading } = useAuth();
-  const [fontsLoaded] = useFonts({ Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold });
+  const [fontsLoaded] = useFonts({
+    SchibstedGrotesk_400Regular,
+    SchibstedGrotesk_500Medium,
+    SchibstedGrotesk_600SemiBold,
+    SchibstedGrotesk_700Bold,
+    SchibstedGrotesk_800ExtraBold,
+    BigShouldersDisplay_600SemiBold,
+    BigShouldersDisplay_800ExtraBold,
+  });
   const ready = fontsLoaded && !loading;
 
   useEffect(() => {

@@ -30,12 +30,11 @@ export function Input({ label, hint, error, style, multiline, ...props }: TextIn
           {
             color: c.text,
             backgroundColor: c.surface,
-            borderColor: error ? c.danger : focused ? c.primary : c.border,
+            borderColor: error ? c.danger : focused ? c.text : c.border,
             minHeight: multiline ? 110 : 48,
             textAlignVertical: multiline ? 'top' : 'center',
             paddingTop: multiline ? 12 : 0,
           },
-          focused && { boxShadow: `0 0 0 3px ${c.primarySoft}` },
           style,
         ]}
         {...props}
