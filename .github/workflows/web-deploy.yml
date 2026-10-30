@@ -16,15 +16,18 @@ jobs:
   deploy:
     runs-on: ubuntu-24.04
     env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN || vars.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
     steps:
       - name: Check Cloudflare secrets
         id: cf
         run: |
+          [ -n "$CLOUDFLARE_ACCOUNT_ID" ] && echo "::notice::CLOUDFLARE_ACCOUNT_ID found" || echo "::warning::CLOUDFLARE_ACCOUNT_ID missing (wrangler will try to detect it)"
           if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
-            echo "::notice::CLOUDFLARE_API_TOKEN secret not set — skipping web deploy"
+            echo "::warning::CLOUDFLARE_API_TOKEN not found in repository secrets or variables — skipping web deploy"
             echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::CLOUDFLARE_API_TOKEN found"
           fi
       - if: steps.cf.outputs.skip != 'true'
         uses: actions/checkout@v5
