@@ -1,5 +1,7 @@
 # Hayat — kişisel asistan
 
+**Web:** https://lifedex.dev-murattemel.workers.dev · **APK:** [Actions → Android APK](https://github.com/murattitone/Lifedex/actions/workflows/android-apk.yml) → son başarılı çalıştırma → Artifacts → `hayat-apk`
+
 Spor, mutfak, ibadet, gelişim, fikirler, görevler, günlük takip ve hedefler için tek uygulama.
 Tek kod tabanı: **Android + iOS + Web** (Expo SDK 58 / React Native 0.88 / Expo Router).
 

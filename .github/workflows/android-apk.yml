@@ -6,7 +6,11 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths-ignore: ['**.md', 'supabase/**']
+    paths-ignore: ['**.md', 'supabase/**', '.github/workflows/web-deploy.yml']
+
+concurrency:
+  group: android-apk
+  cancel-in-progress: true
 
 jobs:
   apk:
